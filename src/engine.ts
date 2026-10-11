@@ -31,3 +31,17 @@ export function handleKeystroke(state: TypingEngineState, char: string, timestam
      currentIndex: newIndex,
    };
 }
+
+export function calculateWPM(state: TypingEngineState, now: number): number {
+  if (state.startTime === null) return 0;
+  const minutes = (now - state.startTime) / 1000 / 60;
+  if (minutes <= 0) return 0;
+  const correct = state.keystrokes.filter(k => k.correct).length;
+  return (correct / 5) / minutes;
+}
+
+export function calculateAccuracy(state: TypingEngineState): number {
+  if (state.keystrokes.length === 0) return 0;
+  const correct = state.keystrokes.filter(k => k.correct).length;
+  return (correct / state.keystrokes.length) * 100;
+}
